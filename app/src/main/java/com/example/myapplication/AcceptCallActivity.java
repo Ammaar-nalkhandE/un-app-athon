@@ -22,6 +22,7 @@ import android.content.pm.PackageManager;
 import java.util.logging.Logger;
 
 public class AcceptCallActivity extends Activity {
+    private static final int REQUEST_CODE = 100;
     private static Logger logger = Logger.getLogger(AcceptCallActivity.class.getName());
     private KeyguardManager keyguardManager;
     private AudioManager audioManager;
@@ -86,4 +87,21 @@ public class AcceptCallActivity extends Activity {
             Toast.makeText(this, "Permission not granted or unsupported device", Toast.LENGTH_SHORT).show();
         }
     }
+    private void requestPermissions() {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ANSWER_PHONE_CALLS) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ANSWER_PHONE_CALLS}, REQUEST_CODE);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted
+            } else {
+                // Permission denied
+            }
+        }
+    }
+
 }
